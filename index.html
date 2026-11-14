@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LIN YU — 林屿 / 独立设计师 & 前端工程师</title>
+<meta name="description" content="林屿，独立设计师与前端工程师。在光与影之间，打磨安静的产品。黑银风格个人作品集。">
+<meta name="theme-color" content="#060607">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LIN YU — 林屿 / 独立设计师 & 前端工程师">
+<meta property="og:description" content="在光与影之间，打磨安静的产品。">
+<meta property="og:locale" content="zh_CN">
+<!-- ① 部署之后，把下面两行取消注释，并换成你的完整地址（分享卡片图已备在 assets/img/og.jpg）
+<meta property="og:image" content="https://<你的用户名>.github.io/<仓库名>/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23060607'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23cfcfd6' stroke-width='1.2'/%3E%3Ctext x='32' y='39' font-family='Georgia,serif' font-size='19' fill='%23f2f2f5' text-anchor='middle'%3ELY%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<noscript><style>
+  .veil,.cursor{display:none!important}
+  [data-hero],[data-reveal]{opacity:1!important;transform:none!important;filter:none!important}
+  .hero__title .ch>span{transform:none!important}
+  body{overflow:auto!important}
+</style></noscript>
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip" href="#work">跳到作品</a>
+
+<!-- ambient layers -->
+<canvas id="stars" class="stars" aria-hidden="true"></canvas>
+<div class="ambient" aria-hidden="true">
+  <div class="ambient__glow ambient__glow--a"></div>
+  <div class="ambient__glow ambient__glow--b"></div>
+  <div class="ambient__grid"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- scroll progress -->
+<div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+<!-- custom cursor -->
+<div class="cursor" aria-hidden="true">
+  <div class="cursor__ring" id="cursor-ring"></div>
+  <div class="cursor__dot" id="cursor-dot"></div>
+</div>
+
+<!-- ============ UNSEAL VEIL ============ -->
+<div class="veil" id="veil" role="button" tabindex="0" aria-label="点击开启信封，进入网站">
+  <div class="veil__panel veil__panel--t"></div>
+  <div class="veil__panel veil__panel--b"></div>
+  <div class="veil__content" id="veil-content">
+    <p class="veil__kicker">A SEALED LETTER · MMXXVI</p>
+    <div class="seal" id="seal">
+      <svg viewBox="0 0 220 220" aria-hidden="true">
+        <defs>
+          <radialGradient id="sealFace" cx="36%" cy="28%" r="82%">
+            <stop offset="0%" stop-color="#fbfbfd"/>
+            <stop offset="20%" stop-color="#d9d9e0"/>
+            <stop offset="44%" stop-color="#b0b0ba"/>
+            <stop offset="68%" stop-color="#7d7d88"/>
+            <stop offset="88%" stop-color="#4a4a53"/>
+            <stop offset="100%" stop-color="#2b2b32"/>
+          </radialGradient>
+          <linearGradient id="sealBevel" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+            <stop offset="38%" stop-color="#ffffff" stop-opacity=".12"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity=".45"/>
+          </linearGradient>
+          <radialGradient id="sealShade" cx="50%" cy="50%" r="50%">
+            <stop offset="62%" stop-color="#000000" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#000000" stop-opacity=".5"/>
+          </radialGradient>
+          <filter id="sealNoise" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="9"/>
+            <feColorMatrix type="saturate" values="0"/>
+            <feComposite in2="SourceGraphic" operator="in"/>
+          </filter>
+          <filter id="sealRough" x="-8%" y="-8%" width="116%" height="116%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" result="warp"/>
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+
+        <circle cx="110" cy="110" r="104" fill="none" stroke="rgba(255,255,255,.22)" stroke-width=".8" stroke-dasharray="1 7"/>
+        <circle cx="110" cy="110" r="97" fill="none" stroke="rgba(255,255,255,.1)" stroke-width=".6"/>
+
+        <g filter="url(#sealRough)">
+          <circle cx="110" cy="110" r="92" fill="url(#sealFace)"/>
+          <circle cx="110" cy="110" r="92" fill="url(#sealShade)"/>
+          <circle cx="110" cy="110" r="92" fill="none" stroke="url(#sealBevel)" stroke-width="2.4"/>
+          <circle cx="110" cy="110" r="91" fill="none" stroke="rgba(0,0,0,.5)" stroke-width=".8"/>
+          <circle cx="110" cy="110" r="92" filter="url(#sealNoise)" opacity=".16"/>
+
+          <circle cx="110" cy="110" r="81" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="1"/>
+          <circle cx="110" cy="110" r="80" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".7"/>
+        </g>
+
+        <g fill="rgba(18,18,24,.72)" font-family="JetBrains Mono, monospace">
+          <text x="110" y="56" text-anchor="middle" font-size="7.2" letter-spacing="2.2">LIN YU</text>
+          <text x="110" y="160" text-anchor="middle" font-size="6.2" letter-spacing="1.4">SHANGHAI · 2026</text>
+        </g>
+
+        <g fill="rgba(18,18,24,.5)">
+          <circle cx="110" cy="72" r="1.1"/><circle cx="110" cy="148" r="1.1"/>
+          <path d="M110 84l1.6 3.9L116 88l-3.3 2.6 1.2 4.1-3.9-2.4-3.9 2.4 1.2-4.1L104 88l4.4-.1z" opacity=".55"/>
+        </g>
+
+        <text x="110" y="127" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif"
+              font-size="58" letter-spacing="2" fill="rgba(255,255,255,.55)">LY</text>
+        <text x="110" y="125" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif"
+              font-size="58" letter-spacing="2" fill="#15151b" fill-opacity=".86">LY</text>
+      </svg>
+      <span class="seal__shine"></span>
+    </div>
+    <p class="veil__hint">TAP TO UNSEAL</p>
+    <p class="veil__sub">点击开启 · 一封写给夜色的信</p>
+  </div>
+  <div class="veil__seam" aria-hidden="true"></div>
+  <div class="veil__frame" aria-hidden="true">
+    <div class="veil__row"><span>LIN YU — PORTFOLIO</span><span>MMXXVI</span></div>
+    <div class="veil__row"><span>31.2304° N / 121.4737° E</span><span>TAP OR SCROLL</span></div>
+  </div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="林屿 首页">
+    <span class="brand__mark">LY</span>
+    <span class="brand__txt">LIN YU<span class="brand__sub">PORTFOLIO / 2026</span></span>
+  </a>
+
+  <nav class="nav__links" aria-label="主导航">
+    <a href="#work" data-num="01">作品</a>
+    <a href="#about" data-num="02">关于</a>
+    <a href="#craft" data-num="03">能力</a>
+    <a href="#notes" data-num="04">留言</a>
+  </nav>
+
+  <div class="nav__right">
+    <button class="btn btn--ghost btn--sm" type="button" data-letter>
+      <span>写一封信</span>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+    <button class="burger" id="burger" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ MOBILE MENU ============ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu__inner">
+    <p class="mono menu__label">INDEX</p>
+    <nav aria-label="移动端导航">
+      <a href="#work"><em>01</em>作品<span>Selected Work</span></a>
+      <a href="#about"><em>02</em>关于<span>About</span></a>
+      <a href="#craft"><em>03</em>能力<span>Capabilities</span></a>
+      <a href="#journey"><em>04</em>履历<span>Journey</span></a>
+      <a href="#notes"><em>05</em>留言<span>Guestbook</span></a>
+    </nav>
+    <div class="menu__foot">
+      <a href="mailto:hello@linyu.design">hello@linyu.design</a>
+      <p>SHANGHAI · GMT+8</p>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <!-- ② 姓名 / 身份 / 一句话介绍：改下面这一段即可 -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__inner">
+
+      <div class="hero__copy">
+        <p class="eyebrow" data-hero="1">
+          <span class="eyebrow__dot"></span>独立设计师 · 前端工程师<span class="eyebrow__sep">/</span>SHANGHAI
+        </p>
+
+        <h1 class="hero__title" id="hero-title">
+          <span class="hero__line"><span class="hero__word" data-split>LIN</span></span>
+          <span class="hero__line hero__line--outline"><span class="hero__word" data-split>YU</span></span>
+        </h1>
+
+        <p class="hero__cn" data-hero="3">林屿<span>LIN YU</span></p>
+
+        <p class="hero__lead" data-hero="4">
+          在光与影之间，打磨安静的产品。<br>
+          <span>Independent designer &amp; front-end engineer crafting quiet, tactile interfaces.</span>
+        </p>
+
+        <div class="hero__actions" data-hero="5">
+          <a class="btn btn--solid" href="#work" data-magnetic>
+            <span>浏览作品</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16 16 4M8 4h8v8" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+          </a>
+          <a class="btn btn--line" href="#about" data-magnetic>
+            <span>认识我</span>
+          </a>
+        </div>
+
+        <ul class="hero__stats" data-hero="6">
+          <li><strong>06</strong><span>年 经 验</span></li>
+          <li><strong>40<sup>+</sup></strong><span>个 项 目</span></li>
+          <li><strong>12</strong><span>项 奖 项</span></li>
+        </ul>
+      </div>
+
+      <div class="hero__orb" data-hero="2">
+        <div class="orb" id="orb">
+          <div class="orb__halo"></div>
+          <div class="orb__ring"></div>
+          <div class="orb__ring orb__ring--b"></div>
+          <div class="orb__ticks" aria-hidden="true"></div>
+          <div class="orb__core">
+            <span class="orb__mono">LY</span>
+            <span class="orb__cap">EST. 2020</span>
+          </div>
+          <span class="orb__tag orb__tag--a">SILVER / 银</span>
+          <span class="orb__tag orb__tag--b">NO. 01</span>
+          <span class="orb__tag orb__tag--c">N 31°14′</span>
+        </div>
+        <p class="orb__caption">FIG. 01 — A QUIET INTERFACE</p>
+      </div>
+    </div>
+
+    <div class="hero__foot" data-hero="7">
+      <a class="scroll" href="#work" aria-label="向下滚动">
+        <span class="scroll__track"><span class="scroll__dot"></span></span>
+        <span class="scroll__txt">SCROLL</span>
+      </a>
+      <p class="hero__avail"><span class="pulse"></span>现可接受 2026 Q1 项目委托</p>
+      <p class="hero__loc">31.2304° N — 121.4737° E</p>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>BLACK</span><i>✦</i><span>SILVER</span><i>✦</i><span>MOTION</span><i>✦</i><span>CRAFT</span><i>✦</i><span>MINIMAL</span><i>✦</i><span>DETAIL</span><i>✦</i>
+      <span>BLACK</span><i>✦</i><span>SILVER</span><i>✦</i><span>MOTION</span><i>✦</i><span>CRAFT</span><i>✦</i><span>MINIMAL</span><i>✦</i><span>DETAIL</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section about" id="about" aria-labelledby="about-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num" data-reveal>02</p>
+        <div>
+          <h2 class="sec-title" id="about-title" data-reveal>关于<span class="ital">我</span></h2>
+          <p class="sec-sub" data-reveal>About — a designer who writes code.</p>
+        </div>
+      </header>
+
+      <div class="about__grid">
+        <div class="about__visual" data-reveal>
+          <div class="lettercard" data-letter role="button" tabindex="0" aria-label="打开一封信">
+            <div class="lettercard__head">
+              <span class="stamp" aria-hidden="true">
+                <svg viewBox="0 0 72 88">
+                  <rect x="1" y="1" width="70" height="86" fill="none" stroke="currentColor" stroke-width=".9" stroke-dasharray="3 2.6" opacity=".5"/>
+                  <rect x="6.5" y="6.5" width="59" height="73" fill="none" stroke="currentColor" stroke-width=".5" opacity=".3"/>
+                  <text x="36" y="43" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="30" fill="currentColor" opacity=".85">L</text>
+                  <line x1="18" y1="52" x2="54" y2="52" stroke="currentColor" stroke-width=".5" opacity=".35"/>
+                  <text x="36" y="63" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.2" letter-spacing="1.2" fill="currentColor" opacity=".75">SHANGHAI</text>
+                  <text x="36" y="72" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="4.8" letter-spacing="1" fill="currentColor" opacity=".5">2026 · POST</text>
+                </svg>
+              </span>
+              <p class="lettercard__to">TO /<br><span>THE ONE<br>WHO STAYS</span></p>
+            </div>
+
+            <div class="lettercard__mid">
+              <span class="mono">LETTER NO. 001 — SEALED</span>
+              <p class="lettercard__hand">For you,<br><em>who stayed.</em></p>
+            </div>
+
+            <p class="lettercard__line">有些话，适合写在纸上。</p>
+            <p class="lettercard__line lettercard__line--dim">Some words belong on paper.</p>
+            <div class="lettercard__foot">
+              <span class="mono">TAP TO OPEN</span>
+              <span class="wax" aria-hidden="true">LY</span>
+            </div>
+            <div class="lettercard__shine" aria-hidden="true"></div>
+          </div>
+          <p class="about__caption">FIG. 02 — 火漆与信纸 / SEAL &amp; PAPER</p>
+        </div>
+
+        <div class="about__body">
+          <p class="about__lead" data-reveal>
+            我是林屿，一名常驻上海的独立设计师与前端工程师。过去六年，我为制表、出版、咖啡与独立软件品牌做事。
+          </p>
+          <p data-reveal>
+            我相信克制的力量：少一点颜色，多一点质感；少一点装饰，多一点节奏。一个界面应该在第一次使用时就被理解，在第无数次使用时仍然耐看。
+          </p>
+          <p data-reveal>
+            设计稿交付之后，我通常继续写它的代码——因为动效的曲线、字距的呼吸、加载时的那一下延迟，都是设计的一部分。
+          </p>
+
+          <dl class="facts" data-reveal>
+            <div><dt>所在地</dt><dd>上海，中国<span>Shanghai, CN</span></dd></div>
+            <div><dt>身份</dt><dd>独立设计师 / 前端工程师</dd></div>
+            <div><dt>合作</dt><dd>品牌官网 · 产品界面 · 动效叙事</dd></div>
+            <div><dt>状态</dt><dd><span class="live"><span class="pulse"></span>接受新项目</span></dd></div>
+          </dl>
+
+          <p class="signature" data-reveal>林屿<span>— since 2020</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <!-- ③ 作品卡片：标题、年份、描述、标签、卡片链接（href）都在这里 -->
+  <section class="section work" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <header class="sec-head sec-head--split">
+        <p class="sec-num" data-reveal>01</p>
+        <div>
+          <h2 class="sec-title" id="work-title" data-reveal>精选<span class="ital">作品</span></h2>
+          <p class="sec-sub" data-reveal>Selected Work — 2023 / 2026</p>
+        </div>
+        <p class="sec-note" data-reveal>四件作品，四种关于「克制」的练习。<br><span>Four studies in restraint.</span></p>
+      </header>
+
+      <div class="work__grid">
+
+        <article class="card" data-reveal data-tilt>
+          <a class="card__link" href="#work" aria-label="银线 SILVERLINE 项目详情">
+            <div class="card__art art--1">
+              <span class="art__type" aria-hidden="true">Silver</span>
+              <div class="art__orb"></div>
+              <div class="art__arc"></div>
+              <div class="art__grid"></div>
+              <span class="art__index">01</span>
+              <span class="art__badge">BRAND SITE</span>
+              <span class="art__spec">CASE 01 · HOROLOGY</span>
+              <span class="art__sheen"></span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>银线 <em>SILVERLINE</em></h3>
+                <span class="card__year">2025</span>
+              </div>
+              <p class="card__desc">为独立制表品牌构建的沉浸式官网。用一条流动的银线串起机芯、工艺与时间。</p>
+              <ul class="card__tags"><li>Art Direction</li><li>WebGL</li><li>Development</li></ul>
+              <span class="card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 19 19 5M9 5h10v10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+              </span>
+            </div>
+          </a>
+        </article>
+
+        <article class="card" data-reveal data-tilt style="--d:.08s">
+          <a class="card__link" href="#work" aria-label="夜航 NIGHTFALL 项目详情">
+            <div class="card__art art--2">
+              <span class="art__type" aria-hidden="true">Night</span>
+              <div class="art__orb"></div>
+              <div class="art__arc"></div>
+              <div class="art__grid"></div>
+              <span class="art__index">02</span>
+              <span class="art__badge">PRODUCT</span>
+              <span class="art__spec">CASE 02 · WRITING</span>
+              <span class="art__sheen"></span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>夜航 <em>NIGHTFALL</em></h3>
+                <span class="card__year">2025</span>
+              </div>
+              <p class="card__desc">面向写作者的夜间写作工具。深色界面随环境光缓慢呼吸，让文字成为唯一的高光。</p>
+              <ul class="card__tags"><li>Product Design</li><li>Design System</li><li>React</li></ul>
+              <span class="card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 19 19 5M9 5h10v10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+              </span>
+            </div>
+          </a>
+        </article>
+
+        <article class="card" data-reveal data-tilt>
+          <a class="card__link" href="#work" aria-label="回声 ECHO 项目详情">
+            <div class="card__art art--3">
+              <span class="art__type" aria-hidden="true">Echo</span>
+              <div class="art__orb"></div>
+              <div class="art__arc"></div>
+              <div class="art__grid"></div>
+              <span class="art__index">03</span>
+              <span class="art__badge">EXPERIMENT</span>
+              <span class="art__spec">CASE 03 · SOUND</span>
+              <span class="art__sheen"></span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>回声 <em>ECHO</em></h3>
+                <span class="card__year">2024</span>
+              </div>
+              <p class="card__desc">基于 Web Audio 的声音可视化实验。声音被转译成缓慢扩张的银色波纹。</p>
+              <ul class="card__tags"><li>Creative Code</li><li>Canvas</li><li>Sound</li></ul>
+              <span class="card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 19 19 5M9 5h10v10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+              </span>
+            </div>
+          </a>
+        </article>
+
+        <article class="card" data-reveal data-tilt style="--d:.08s">
+          <a class="card__link" href="#work" aria-label="纸间 PAPERSPACE 项目详情">
+            <div class="card__art art--4">
+              <span class="art__type" aria-hidden="true">Paper</span>
+              <div class="art__orb"></div>
+              <div class="art__arc"></div>
+              <div class="art__grid"></div>
+              <span class="art__index">04</span>
+              <span class="art__badge">COMMERCE</span>
+              <span class="art__spec">CASE 04 · PAPER</span>
+              <span class="art__sheen"></span>
+            </div>
+            <div class="card__body">
+              <div class="card__top">
+                <h3>纸间 <em>PAPERSPACE</em></h3>
+                <span class="card__year">2024</span>
+              </div>
+              <p class="card__desc">手工纸品品牌的电商与内容系统。克制到近乎固执的排版，让纸张的纹理说话。</p>
+              <ul class="card__tags"><li>E-commerce</li><li>Editorial</li><li>Shopify</li></ul>
+              <span class="card__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 19 19 5M9 5h10v10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+              </span>
+            </div>
+          </a>
+        </article>
+
+      </div>
+
+      <div class="work__more" data-reveal>
+        <p>更多项目与过程稿，欢迎来信索取。</p>
+        <a class="link-underline" href="mailto:hello@linyu.design">写一封邮件 <span>↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CRAFT ============ -->
+  <section class="section craft" id="craft" aria-labelledby="craft-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num" data-reveal>03</p>
+        <div>
+          <h2 class="sec-title" id="craft-title" data-reveal>能力<span class="ital">清单</span></h2>
+          <p class="sec-sub" data-reveal>Capabilities — what I actually do.</p>
+        </div>
+      </header>
+
+      <div class="craft__list">
+        <div class="craft__row" data-reveal>
+          <span class="craft__no">01</span>
+          <h3>界面设计<span>Interface Design</span></h3>
+          <p>视觉语言、组件系统、设计规范。从第一张情绪板到最后一份标注。</p>
+          <span class="craft__mark">◐</span>
+        </div>
+        <div class="craft__row" data-reveal>
+          <span class="craft__no">02</span>
+          <h3>前端工程<span>Front-End</span></h3>
+          <p>语义化、性能预算、可访问性。把设计稿还原到像素，也把它做得比设计稿更快。</p>
+          <span class="craft__mark">◑</span>
+        </div>
+        <div class="craft__row" data-reveal>
+          <span class="craft__no">03</span>
+          <h3>动效叙事<span>Motion</span></h3>
+          <p>滚动节奏、页面转场、微交互。动效不是装饰，是讲清因果的方式。</p>
+          <span class="craft__mark">◒</span>
+        </div>
+        <div class="craft__row" data-reveal>
+          <span class="craft__no">04</span>
+          <h3>品牌与字体<span>Type</span></h3>
+          <p>标识、字体排印、印刷物。一个品牌的气质，多半藏在字距里。</p>
+          <span class="craft__mark">◓</span>
+        </div>
+      </div>
+
+      <div class="stack" data-reveal>
+        <p class="stack__label">TOOLKIT / 工具箱</p>
+        <ul>
+          <li>Figma</li><li>TypeScript</li><li>React</li><li>Next.js</li><li>GSAP</li>
+          <li>Three.js</li><li>Tailwind</li><li>After Effects</li><li>Blender</li><li>InDesign</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOURNEY ============ -->
+  <section class="section journey" id="journey" aria-labelledby="journey-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num" data-reveal>04</p>
+        <div>
+          <h2 class="sec-title" id="journey-title" data-reveal>履历<span class="ital">简表</span></h2>
+          <p class="sec-sub" data-reveal>Journey — a short timeline.</p>
+        </div>
+      </header>
+
+      <ol class="timeline">
+        <li data-reveal>
+          <span class="timeline__year">2022 —</span>
+          <div class="timeline__body">
+            <h3>独立执业<span>Independent Practice</span></h3>
+            <p>成立个人工作室，服务品牌方与早期产品团队，从策略、设计一路做到上线。</p>
+          </div>
+          <span class="timeline__dot"></span>
+        </li>
+        <li data-reveal>
+          <span class="timeline__year">2019 — 2022</span>
+          <div class="timeline__body">
+            <h3>设计工作室 · 资深设计师<span>Senior Designer</span></h3>
+            <p>负责品牌数字体验项目，主导 12 个官网与 3 套设计系统。</p>
+          </div>
+          <span class="timeline__dot"></span>
+        </li>
+        <li data-reveal>
+          <span class="timeline__year">2017 — 2019</span>
+          <div class="timeline__body">
+            <h3>互联网公司 · 前端工程师<span>Front-End Engineer</span></h3>
+            <p>在工程与设计之间来回，学会用代码衡量一个想法是否成立。</p>
+          </div>
+          <span class="timeline__dot"></span>
+        </li>
+        <li data-reveal>
+          <span class="timeline__year">2013 — 2017</span>
+          <div class="timeline__body">
+            <h3>视觉传达 · 学士<span>BFA, Visual Communication</span></h3>
+            <p>在印刷机与网格纸之间，养成了对字距的偏执。</p>
+          </div>
+          <span class="timeline__dot"></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ NOTES ============ -->
+  <section class="section notes" id="notes" aria-labelledby="notes-title">
+    <div class="wrap">
+      <header class="sec-head sec-head--split">
+        <p class="sec-num" data-reveal>05</p>
+        <div>
+          <h2 class="sec-title" id="notes-title" data-reveal>留言<span class="ital">收件箱</span></h2>
+          <p class="sec-sub" data-reveal>Guestbook — 一封也可以，不必很长。</p>
+        </div>
+        <div class="notes__count" data-reveal>
+          <strong id="note-count">0</strong><span>LETTERS<br>RECEIVED</span>
+        </div>
+      </header>
+
+      <div class="notes__grid">
+        <form class="noteform" id="note-form" data-reveal autocomplete="off">
+          <p class="noteform__title">写一封短信<span>Write a note</span></p>
+          <label class="field">
+            <span>你的名字</span>
+            <input type="text" name="name" id="note-name" maxlength="24" placeholder="如何称呼你" required>
+          </label>
+          <label class="field">
+            <span>想说的话</span>
+            <textarea name="message" id="note-msg" maxlength="140" rows="4" placeholder="最多 140 字，短一点也没关系" required></textarea>
+          </label>
+          <div class="noteform__foot">
+            <span class="noteform__hint" id="note-hint">留言保存在本机浏览器 · 不上传服务器</span>
+            <button class="btn btn--solid btn--sm" type="submit" data-magnetic>
+              <span>寄 出</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 8 15 1 8 15l-1-6-6-1Z" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            </button>
+          </div>
+        </form>
+
+        <div class="inbox" data-reveal>
+          <div class="inbox__head">
+            <h3>收件箱<span>INBOX</span></h3>
+            <button class="inbox__toggle" id="inbox-toggle" type="button" aria-expanded="true" aria-controls="note-list">
+              <span>合 上</span>
+            </button>
+          </div>
+          <ul class="inbox__list" id="note-list" aria-live="polite"></ul>
+          <p class="inbox__empty" id="note-empty" hidden>还没有信件。第一封，可以是你的。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <!-- ④ 邮箱、社交链接：记得同时改 assets/js/app.js 里的 CONFIG.email -->
+  <footer class="footer" id="contact">
+    <div class="wrap">
+      <div class="footer__cta">
+        <div class="footer__cta-main">
+          <p class="mono" data-reveal>HAVE A PROJECT IN MIND · 有想做的事？</p>
+          <a class="footer__mail" href="mailto:hello@linyu.design" data-reveal>hello@linyu.design</a>
+          <div class="footer__actions" data-reveal>
+            <button class="btn btn--line btn--sm" type="button" id="copy-mail" data-magnetic><span>复制邮箱</span></button>
+            <button class="btn btn--line btn--sm" type="button" data-letter data-magnetic><span>写一封信</span></button>
+          </div>
+        </div>
+
+        <dl class="footer__meta" data-reveal>
+          <div><dt>BASE</dt><dd>上海 · Shanghai</dd></div>
+          <div><dt>LOCAL TIME</dt><dd><em id="clock">--:--</em><span>GMT+8</span></dd></div>
+          <div><dt>STATUS</dt><dd><span class="pulse"></span>2026 Q1 接受委托</dd></div>
+        </dl>
+      </div>
+
+      <div class="footer__bar">
+        <div class="footer__brand">
+          <span class="brand__mark">LY</span>
+          <p>林屿 · LIN YU<br><span>独立设计师 &amp; 前端工程师</span></p>
+        </div>
+
+        <nav class="footer__nav" aria-label="页脚导航">
+          <a href="#work">作品</a>
+          <a href="#about">关于</a>
+          <a href="#craft">能力</a>
+          <a href="#notes">留言</a>
+        </nav>
+
+        <ul class="footer__social">
+          <li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://dribbble.com/" target="_blank" rel="noopener">Dribbble</a></li>
+          <li><a href="mailto:hello@linyu.design">Email</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__bottom">
+        <p>© 2026 LIN YU. All rights reserved.</p>
+        <p class="footer__made">DESIGNED IN THE DARK · MADE WITH LIGHT</p>
+        <a class="footer__top" href="#top">回到顶部 <span>↑</span></a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ============ LETTER MODAL ============ -->
+<div class="letter" id="letter" aria-hidden="true">
+  <div class="letter__backdrop" data-letter-close></div>
+  <div class="letter__stage" role="dialog" aria-modal="true" aria-labelledby="letter-subject">
+    <div class="envelope" aria-hidden="true">
+      <svg class="envelope__lines" viewBox="0 0 520 300" preserveAspectRatio="none">
+        <polygon points="0,0 520,0 260,152" fill="rgba(255,255,255,.035)"/>
+        <polyline points="0,0 260,152 520,0" fill="none" stroke="rgba(255,255,255,.17)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <polyline points="0,300 260,168 520,300" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <line x1="0" y1="0" x2="0" y2="300" stroke="rgba(255,255,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        <line x1="520" y1="0" x2="520" y2="300" stroke="rgba(255,255,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <p class="envelope__addr">TO / THE VISITOR<br><span>SHANGHAI · CN</span></p>
+      <p class="envelope__from">FROM LIN YU</p>
+    </div>
+
+    <article class="paper" id="letter-subject">
+      <header class="paper__head">
+        <p class="mono">A LETTER FOR YOU</p>
+        <span class="paper__stamp" aria-hidden="true">LY<br><em>2026</em></span>
+      </header>
+      <p class="paper__salut">亲爱的访客，</p>
+      <p>谢谢你点开这封信。在这个页面里，我留了一点夜色、一点银，还有一句不太好意思当面说的话：</p>
+      <p class="paper__quote">「好的设计，是让人安静下来的那一下。」</p>
+      <p>如果你也在做一件需要耐心的事，也许我们可以聊聊。信不必长，一两句就好。</p>
+      <footer class="paper__sign">
+        <span>林屿</span>
+        <span class="wax wax--sm" aria-hidden="true">LY</span>
+      </footer>
+      <div class="paper__shine" aria-hidden="true"></div>
+    </article>
+
+    <span class="envelope__seal" aria-hidden="true">LY</span>
+  </div>
+
+  <button class="letter__close" type="button" data-letter-close aria-label="合上信件">
+    <span>合 上</span>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.2"/></svg>
+  </button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
